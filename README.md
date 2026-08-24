@@ -1,29 +1,52 @@
-# uprighthelper 🪑 🤖
+# uprighthelper
 
-## Description:
-To have a proper posture, you need to stay upright while sitting. This website uses machine learning model to learn patterns 👣 in your posture and helps your back by keeping you in a proper posture. This is acheived by warning you whenever you are not sitting upright with an alert sound and visual effects.
-## Running the website:
- You can run the website on: https://aaryanporwal.github.io/uprighthelper/
- 
- OR
- 
- ### To run the website locally:
- Just clone the repo and open index.html in your browser
- 1. When asked by the browser, give permission to utilize the webcam.
- 2. Sit in a proper position (upright) and click the Right Position button a few times. (15-20 is usually enough). Each time you press the button it captures an image and trains the machine learning algorithm with it. So to get good results, be sure to look at different parts of the screen, lean a bit to the right/left etc.
- 3. Next, sit in a wrong position, (NOT upright) and click the Wrong Position button a few times. (15-20 is usually enough). Again, try looking at different parts of the screen, etc.
-4. After doing all these steps, you are ready to go. Leave the website open and it will warn you with sound/viusals whenever you start siting in a wrong posiiton.
-If you think it is not working accurately enough, try adding more right position/wrong position samples to train your model better.
+A browser-based posture monitor that uses on-device pose estimation to warn you when you slouch. Everything runs locally — no data leaves your machine.
 
-## Important Note: 
-Note that, this website does not send any data to the web. Everything happens locally, which means YOUR data stays in YOUR machine. Whenever you refresh the page, all the captured data vanishes.
+**Live demo:** https://aaryanporwal.github.io/uprighthelper/
 
-## TO-DO
-1. Improve the interface
-2. Refactor the code (use the big brain javascript I've been learning since 5 months)
-3. Migrate to the ✨<b>beautiful</b>✨ ml5.js (or Tensorflow.JS if able to dedicate more time)
-4. Make a browser extension?
-5. Can use the apple's widget API to make a really cool widget for this
+## How it works
+
+1. Grant webcam access when prompted.
+2. Sit upright and click **Right Posture** — the app collects ~15 frames to learn your upright baseline.
+3. Slouch and click **Wrong Posture** — the app learns how far you deviate when sitting poorly.
+4. Leave the page open. It monitors your posture and alerts you (background color + sound) when you slouch.
+
+Calibration is saved in your browser via IndexedDB, so you don't need to recalibrate every refresh.
+
+## Tech stack
+
+- **MoveNet Lightning** via TensorFlow.js for real-time pose detection
+- Geometric posture scoring (head, torso, shoulder metrics)
+- Vite + TypeScript, bundled and pinned dependencies (no CDN scripts)
+- Bun for package management
+
+## Local development
+
+Requires [Bun](https://bun.sh).
+
+```bash
+git clone https://github.com/aaryanporwal/uprighthelper.git
+cd uprighthelper
+bun install
+bun run dev
+```
+
+Open the URL Vite prints (usually `http://localhost:5173/uprighthelper/`). Webcam requires HTTPS or localhost.
+
+### Scripts
+
+```bash
+bun run dev       # start dev server
+bun run build     # production build to dist/
+bun run test      # run vitest
+bun run lint      # eslint
+bun run preview   # preview production build
+```
+
+## Privacy
+
+All processing happens in your browser. Webcam frames are never uploaded. Calibration data stays in local IndexedDB.
 
 ## License
-uprighthelper is a Free Software, licensed under MIT License; see License.md for details.
+
+MIT — see [LICENSE](LICENSE).
