@@ -42,6 +42,8 @@ export const KEYPOINT_CONFIDENCE = 0.3;
 export const CALIBRATION_FRAMES = 15;
 export const DETECTION_INTERVAL_MS = 100;
 export const AUDIO_COOLDOWN_MS = 3000;
+/** Consecutive frames a new posture must persist before it takes effect. */
+export const POSTURE_CONFIRM_FRAMES = 4;
 
 export const DEFAULT_THRESHOLDS: PostureMetrics = {
   earShoulderDeviation: 15,

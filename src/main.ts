@@ -4,6 +4,7 @@ import { AudioAlerts, VisualAlerts } from './alerts/index.ts';
 import { CalibrationStore } from './calibration/store.ts';
 import { createMoveNetDetector, disposeDetector } from './pose/detector.ts';
 import { scorePose } from './pose/posture.ts';
+import { PostureStabilizer } from './pose/stabilizer.ts';
 import { AppState } from './state/app-state.ts';
 import {
   CALIBRATION_FRAMES,
@@ -21,6 +22,7 @@ const appState = new AppState();
 const calibration = new CalibrationStore();
 const visualAlerts = new VisualAlerts();
 const audioAlerts = new AudioAlerts();
+const stabilizer = new PostureStabilizer();
 
 let detector: PoseDetector | null = null;
 let stream: MediaStream | null = null;
@@ -50,7 +52,7 @@ async function detectOnce(): Promise<void> {
   const { state, metrics } = scorePose(poses[0], calibration.get(), frameHeight);
 
   if (appState.phase === 'monitoring' && state !== 'unknown') {
-    handlePostureChange(state);
+    handlePostureChange(stabilizer.push(state));
   }
 
   if (calibratingKind && metrics) {
@@ -99,6 +101,7 @@ async function finishCalibration(kind: 'upright' | 'bad'): Promise<void> {
     setStatus('Calibration complete. Monitoring your posture.');
   }
 
+  stabilizer.reset();
   appState.setPhase('monitoring');
 }
 
